@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yan Si's Portfolio</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+<style>
+/* Layout: centred one-page scroll — plain nav, short hero, centred section titles with a rule, simple image cards. */
+:root{
+  --bg:#ffffff; --surface:#ffffff; --fg:#3a2a26; --muted:#8c6f66; --line:#ffe4d9;
+  --accent:#ff7a59; --accent-ink:#ffffff; --tint:#fff3ec; --sun:#ffd166; --mint:#d9f3ea; --sky:#fff8e1; --teal:#20a68c;
+  color-scheme:light;
+  --font:"Nunito","Segoe UI",system-ui,sans-serif;
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.6;margin:0;text-align:center}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+a{color:inherit}
+.wrap{max-width:960px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{line-height:1.2;text-wrap:balance;margin:0}
+
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--bg);border-bottom:1px solid var(--line)}
+.logo{color:var(--fg)}
+header .wrap{display:flex;align-items:center;justify-content:space-between;padding-block:1rem;gap:1rem;flex-wrap:wrap}
+.logo{font-weight:800;font-size:1.1rem;text-decoration:none;letter-spacing:.02em}
+nav{display:flex;gap:1.5rem;font-size:.9rem;font-weight:600}
+nav a{text-decoration:none;color:var(--muted)}
+nav a:hover{color:var(--teal)}
+
+.hero{padding-block:6rem 5rem}
+.hero h1{font-size:clamp(2.2rem,5vw,3.2rem);font-weight:800}
+.rule{width:48px;height:5px;background:var(--sun);margin:1.25rem auto;border-radius:3px}
+.hero h2{font-size:1.25rem;font-weight:700;color:var(--fg)}
+.hero p{color:var(--muted);margin:.5rem 0 2rem;font-size:1.05rem}
+.btn{display:inline-block;padding:.8rem 1.6rem;border-radius:999px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:700;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase}
+.btn:focus-visible,.chip:focus-visible,nav a:focus-visible,.card a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+section.projects{padding-block:4rem 5rem}
+section.projects h2{font-size:1.8rem;font-weight:800}
+.filters{display:flex;justify-content:center;gap:.4rem 1.5rem;flex-wrap:wrap;margin:1.5rem 0 2.5rem;font-size:.9rem;font-weight:600}
+.chip{font:inherit;background:none;border:0;padding:.25rem 0;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent}
+.chip{padding:.35rem .9rem;border-radius:999px;border:1px solid transparent}
+.chip[aria-pressed="true"]{color:var(--accent-ink);background:var(--accent);border-bottom-color:transparent}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2rem;max-width:760px;margin:0 auto}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;min-width:0;display:flex;flex-direction:column;box-shadow:0 8px 24px rgba(255,122,89,.10);transition:transform .2s}
+.card:hover{transform:translateY(-3px)}
+.cover{aspect-ratio:4/3;max-width:100%;background:var(--tint);display:block}
+.cover svg{width:100%;height:100%;display:block}
+.thumb{border-bottom:1px solid var(--line)}
+.card[data-category="ml"] .thumb svg rect:first-child{fill:var(--mint)}
+.card[data-category="ml"] .thumb svg g[stroke]{stroke:var(--teal)}
+.card[data-category="ml"] .thumb svg g[fill="var(--accent)"]{fill:var(--teal)}
+.card[data-category="web"] .thumb svg rect:first-child{fill:var(--tint)}
+.card-body{padding:1.25rem 1.25rem 1.5rem;display:flex;flex-direction:column;gap:.5rem;align-items:center;flex:1}
+.icons{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin:0;padding:0;list-style:none}
+.icons li{font-size:.7rem;font-weight:700;letter-spacing:.04em;color:var(--fg);background:var(--mint);padding:.2rem .6rem;border-radius:999px}
+.card h3{font-size:1.15rem;font-weight:800;margin-top:.25rem}
+.card p{margin:0;color:var(--muted);font-size:.9rem}
+.card a{margin-top:auto;padding-top:.75rem;font-size:.85rem;font-weight:700;color:var(--teal);text-decoration:none;letter-spacing:.04em}
+.card a:hover{text-decoration:underline}
+
+
+/* project detail views */
+.detail{padding-block:3.5rem 5rem;text-align:left}
+.back{display:inline-block;font-size:.85rem;font-weight:700;color:var(--teal);text-decoration:none;margin-bottom:1.5rem}
+.back:hover{text-decoration:underline}
+.detail h2{font-size:2rem;font-weight:800}
+.detail .lede{color:var(--muted);margin:.5rem 0 0}
+.detail .icons{justify-content:flex-start;margin-top:1rem}
+.detail h3{font-size:.8rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin:2.5rem 0 .75rem}
+.detail p{margin:0 0 .9rem}
+.detail ul.list{margin:0;padding-left:1.2rem}
+.detail ul.list li{margin-bottom:.4rem}
+.objective{background:var(--sky);padding:1.1rem 1.4rem;border-radius:14px;margin-top:.5rem}
+.objective p{margin:0}
+
+/* detail grid system: 2 columns, 1rem gutter, shared card radius/border */
+.detail .wrap{max-width:860px}
+.pains,.features,.build-notes{display:grid;gap:1rem;margin-top:.25rem}
+.pains{grid-template-columns:repeat(3,minmax(0,1fr))}
+.pains>div,.build-notes>div{border:1px solid var(--line);box-shadow:0 4px 14px rgba(255,122,89,.06);border-radius:14px;padding:1.1rem;min-width:0;background:var(--surface)}
+.pains b,.feat b,.build-notes b{display:block;font-size:.95rem;font-weight:800;line-height:1.3;margin:.35rem 0 .25rem}
+.build-notes b{margin-top:0}
+.pains small,.feat small,.build-notes small{display:block;color:var(--muted);font-size:.82rem;line-height:1.45}
+.pin{display:inline-flex;align-items:center;justify-content:center;width:1.4rem;height:1.4rem;border-radius:50%;font-size:.7rem;font-weight:800;color:#fff;background:var(--accent)}
+.step{display:inline-flex;align-items:center;justify-content:center;width:1.4rem;height:1.4rem;border-radius:50%;font-size:.7rem;font-weight:800;color:var(--accent-ink);background:var(--accent)}
+.solves{display:block;font-style:normal;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:.4rem}
+.solves.p1{color:var(--fg)}.solves.p2{color:#178f78}.solves.p3{color:#c98f0a}
+.pin.p1{background:#ff7a59}.pin.p2{background:#20a68c}.pin.p3{background:#f0b429}
+.features{grid-template-columns:repeat(2,minmax(0,1fr))}
+.feat{margin:0;min-width:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);display:flex;flex-direction:column}
+.fmedia{aspect-ratio:16/10;max-width:100%;background:var(--tint);border-bottom:1px solid var(--line)}
+.fmedia img,.fmedia video{width:100%;height:100%;object-fit:cover;object-position:top;display:block}
+.features.contain .fmedia{background:#fff}
+.features.contain .fmedia img{object-fit:contain;object-position:center;padding:.5rem;box-sizing:border-box}
+.feat figcaption{padding:.9rem 1rem 1.1rem;text-align:left}
+.build{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:1rem;align-items:start}
+.build-notes{grid-template-columns:repeat(2,minmax(0,1fr))}
+.diagram{margin:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#0b0f14}
+.diagram img{width:100%;height:auto;display:block}
+@media (max-width:700px){.pains,.features,.build-notes{grid-template-columns:1fr}}
+
+footer{padding-block:2rem;color:var(--muted);font-size:.8rem;border-top:1px solid var(--line)}
+
+@media (max-width:640px){.grid{grid-template-columns:1fr}.hero{padding-block:4rem 3rem}nav{gap:1rem}}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#top">Yan Si</a>
+    <nav>
+      <a href="#top">Home</a>
+      <a href="#project">Project</a>
+    </nav>
+  </div>
+</header>
+
+<div id="home">
+<section class="hero wrap" id="top">
+  <h1>Hi, I am Yan Si</h1>
+  <div class="rule"></div>
+  <h2>My Little Corner</h2>
+  <p>I love to learn and ship data driven things.</p>
+  <a class="btn" href="#project">Explore my projects</a>
+</section>
+
+<section class="projects" id="project">
+  <div class="wrap">
+    <h2>Projects</h2>
+    <div class="rule"></div>
+    <div class="filters" role="group" aria-label="Filter projects">
+      <button class="chip" data-filter="all" aria-pressed="true">Show all</button>
+      <button class="chip" data-filter="web" aria-pressed="false">Web Application</button>
+      <button class="chip" data-filter="ml" aria-pressed="false">Machine Learning</button>
+    </div>
+
+    <div class="grid" id="cards">
+      <article class="card" data-category="web">
+        <div class="cover thumb">
+          <svg viewBox="0 0 400 300" role="img" aria-label="A week grid of meal slots">
+            <rect width="400" height="300" fill="var(--tint)"/>
+            <g fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round">
+              <!-- 7 columns x 3 rows: a planned week -->
+              <g id="wk">
+                <rect x="96" y="96" width="24" height="24" rx="6"/><rect x="130" y="96" width="24" height="24" rx="6"/><rect x="164" y="96" width="24" height="24" rx="6"/><rect x="198" y="96" width="24" height="24" rx="6"/><rect x="232" y="96" width="24" height="24" rx="6"/><rect x="266" y="96" width="24" height="24" rx="6"/><rect x="300" y="96" width="24" height="24" rx="6"/>
+                <rect x="96" y="138" width="24" height="24" rx="6"/><rect x="130" y="138" width="24" height="24" rx="6"/><rect x="164" y="138" width="24" height="24" rx="6"/><rect x="198" y="138" width="24" height="24" rx="6"/><rect x="232" y="138" width="24" height="24" rx="6"/><rect x="266" y="138" width="24" height="24" rx="6"/><rect x="300" y="138" width="24" height="24" rx="6"/>
+                <rect x="96" y="180" width="24" height="24" rx="6"/><rect x="130" y="180" width="24" height="24" rx="6"/><rect x="164" y="180" width="24" height="24" rx="6"/><rect x="198" y="180" width="24" height="24" rx="6"/><rect x="232" y="180" width="24" height="24" rx="6"/><rect x="266" y="180" width="24" height="24" rx="6"/><rect x="300" y="180" width="24" height="24" rx="6"/>
+              </g>
+            </g>
+            <g fill="var(--accent)">
+              <rect x="96" y="96" width="24" height="24" rx="6"/><rect x="130" y="96" width="24" height="24" rx="6"/><rect x="164" y="96" width="24" height="24" rx="6"/><rect x="198" y="96" width="24" height="24" rx="6"/>
+              <rect x="96" y="138" width="24" height="24" rx="6"/><rect x="130" y="138" width="24" height="24" rx="6"/><rect x="164" y="138" width="24" height="24" rx="6"/>
+              <rect x="96" y="180" width="24" height="24" rx="6"/><rect x="130" y="180" width="24" height="24" rx="6"/><rect x="164" y="180" width="24" height="24" rx="6"/><rect x="198" y="180" width="24" height="24" rx="6"/>
+            </g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <ul class="icons"><li>React</li><li>FastAPI</li><li>PostgreSQL</li></ul>
+          <h3>MealVitals</h3>
+          <p>A health aware meal planner that automate meal planning and builds the grocery list</p>
+          <a href="#mealvitals">View Project</a>
+        </div>
+      </article>
+
+      <article class="card" data-category="ml">
+        <div class="cover thumb">
+          <svg viewBox="0 0 400 300" role="img" aria-label="A leaf outline with three lesion spots">
+            <rect width="400" height="300" fill="var(--tint)"/>
+            <g fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M140 220 C140 130 190 80 270 72 C268 160 220 215 140 220 Z"/>
+              <path d="M146 214 C180 170 220 125 262 80"/>
+            </g>
+            <g fill="var(--accent)">
+              <circle cx="214" cy="150" r="7"/><circle cx="236" cy="118" r="4.5"/><circle cx="196" cy="182" r="4"/>
+            </g>
+          </svg>
+        </div>
+        <div class="card-body">
+          <ul class="icons"><li>PyTorch</li><li>ResNet-18</li><li>PSA</li></ul>
+          <h3>Plant Disease Classification</h3>
+          <p>Classify 38 plant diseases from leaf images using ResNet-18 with Pyramid Squeeze Attention</p>
+          <a href="#plant-disease">View Project</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+</div>
+
+<section class="detail" id="mealvitals" hidden>
+  <div class="wrap">
+    <a class="back" href="#project">← Back to projects</a>
+    <h2>MealVitals</h2>
+    <p class="lede">Market-to-table meal planning for Singaporeans managing chronic conditions, and the caregivers who cook for them.</p>
+
+    <h3>Problem</h3>
+    <p>About one in three Singapore residents has hyperlipidaemia or hypertension, and awareness campaigns have not turned into better daily food choices. The target population is the <strong>1.1 million residents aged 18+</strong> diagnosed with or at risk of chronic conditions, plus the caregivers who plan their meals. Three gaps stand in the way:</p>
+    <div class="pains">
+      <div><span class="pin p1">1</span><b>Labels are hard to read</b><small>68% don't know the daily salt limit, 83% the sodium limit, and 30% find the Nutrition Information Panel confusing.</small></div>
+      <div><span class="pin p2">2</span><b>Planning takes effort</b><small>Even people who know the healthier choice drop it when they have to plan every meal and shop for it.</small></div>
+      <div><span class="pin p3">3</span><b>Elderly users struggle with apps</b><small>Many diners with chronic conditions can't manage a digital tool on their own, so the burden lands on family.</small></div>
+    </div>
+
+    <h3>Key objective</h3>
+    <div class="objective"><p>Make dietary management easy to stick to: turn a diner's health profile, nutrient limits and food preferences into a week of meals and a grocery list, automatically. MealVitals recommends meals; it does not give medical advice.</p></div>
+
+    <h3>Solution</h3>
+    <p>Six features, each mapped to the gap it closes. Clips and screenshots are from the running app.</p>
+    <div class="features">
+      <figure class="feat"><div class="fmedia"><img src="mv-profile.jpg" alt="Add new diner form with health conditions, dietary preference and allergens" loading="lazy"></div><figcaption><span class="step">1</span><b>Caregiver mode</b><em class="solves p3">Solves gap: Elderly users struggle with apps</em><small>One caretaker account manages several diners. Each diner carries their own conditions, diet and allergens, so a family member can plan on Ah Ma's behalf.</small></figcaption></figure>
+      <figure class="feat"><div class="fmedia"><video src="mv-plan-week.mp4" poster="mv-week.jpg" controls muted playsinline preload="metadata"></video></div><figcaption><span class="step">2</span><b>Plan a week in one tap</b><em class="solves p2">Solves gap: Planning takes effort</em><small>An OR-Tools CP-SAT solver fills all seven days within the diner's calorie, sodium, sugar and fat limits. Meals already saved stay fixed; conflicts are flagged first.</small></figcaption></figure>
+      <figure class="feat"><div class="fmedia"><img src="mv-discover.jpg" alt="Discover screen with diet, allergen and safe-for filters and labelled dish cards" loading="lazy"></div><figcaption><span class="step">3</span><b>Dishes labelled for your condition</b><em class="solves p1">Solves gap: Labels are hard to read</em><small>Every dish is rated Safe, Moderation, Caution or Avoid per condition. Filters for diet, allergens and "safe for" replace reading nutrition panels.</small></figcaption></figure>
+      <figure class="feat"><div class="fmedia"><video src="mv-swap-shop.mp4" poster="mv-shopping.jpg" controls muted playsinline preload="metadata"></video></div><figcaption><span class="step">4</span><b>Swap a dish, see the effect</b><em class="solves p2">Solves gap: Planning takes effort</em><small>Change any slot and today's nutrition updates live against the targets, then the shopping list rebuilds itself.</small></figcaption></figure>
+      <figure class="feat"><div class="fmedia"><img src="mv-shopping.jpg" alt="Shopping list grouped by aisle with quantities and a progress bar" loading="lazy"></div><figcaption><span class="step">5</span><b>Grocery list from the plan</b><em class="solves p2">Solves gap: Planning takes effort</em><small>The week's ingredients are consolidated by aisle with quantities, a tick-off progress bar and one-tap copy, closing the loop from market to table.</small></figcaption></figure>
+      <figure class="feat"><div class="fmedia"><img src="mv-health.jpg" alt="Health tracker with blood sugar trend chart against the healthy range" loading="lazy"></div><figcaption><span class="step">6</span><b>Track the outcome</b><em class="solves p1">Solves gap: Labels are hard to read</em><small>Log blood sugar, blood pressure and cholesterol and see trends against the healthy range, so diet changes are tied to results.</small></figcaption></figure>
+    </div>
+
+    <h3>How it's built</h3>
+    <div class="build-notes">
+        <div><b>Stack</b><small>React + Vite frontend, FastAPI backend, PostgreSQL via async SQLAlchemy, OR-Tools CP-SAT for planning. Containerised with Docker, deployed to Google Cloud Run through GitHub Actions.</small></div>
+        <div><b>Why cloud</b><small>Zero upfront CAPEX and a lower three-year total cost of ownership than two on-premises racks sized for year-3 traffic.</small></div>
+        <div><b>Business model</b><small>Freemium: planning and health tracking are free; personalised auto-fill and dynamic recommendations are premium.</small></div>
+        <div><b>Projected users</b><small>At 2% adoption of the 1.1M target population: 4,400 monthly active users in year 1, 14,300 in year 2 and 22,000 by year 3.</small></div>
+      </div>
+  </div>
+</section>
+
+<section class="detail" id="plant-disease" hidden>
+  <div class="wrap">
+    <a class="back" href="#project">← Back to projects</a>
+    <h2>Plant Disease Classification</h2>
+    <p class="lede">ResNet-18 with Pyramid Squeeze Attention, trained on lab images and adapted to real field photos.</p>
+
+    <h3>Problem</h3>
+    <p>Spotting plant disease from a leaf photo means reading subtle cues: lesion patterns, texture, colour shifts and shape changes that differ by disease stage. The training data is <strong>PlantVillage</strong>, 54,305 lab images across 14 species and 38 classes; the real test is <strong>PlantDoc</strong>, 2,578 photos taken in the field. Three gaps stand in the way:</p>
+    <div class="pains">
+      <div><span class="pin p1">1</span><b>Depth is not free</b><small>Deeper plain CNNs hit the degradation problem, where adding layers raises training error, and they can attend to background instead of the small diseased regions.</small></div>
+      <div><span class="pin p2">2</span><b>Lab images are not field images</b><small>PlantVillage shows one leaf on a grey background. PlantDoc has mixed lighting, angles and clutter. A model that is near perfect in the lab can collapse in the field.</small></div>
+      <div><span class="pin p3">3</span><b>Classes are imbalanced</b><small>The largest PlantVillage class has 36× more images than the smallest, so a naive model learns the common diseases and ignores the rare ones.</small></div>
+    </div>
+
+    <h3>Key objective</h3>
+    <div class="objective"><p>Test whether a simple ResNet-18 can reach a high AUC on 38-class plant disease classification, and then measure how far discriminative fine-tuning closes the gap between lab images and field images.</p></div>
+
+    <h3>Solution</h3>
+    <p>Six steps in the order they were built.</p>
+    <div class="features contain">
+      <figure class="feat"><div class="fmedia"><img src="pd-data.jpg" alt="Healthy and late-blight leaves from PlantVillage (lab) and PlantDoc (field)" loading="lazy"></div><figcaption><span class="step">1</span><b>Two datasets, one label set</b><small>PlantVillage is split 70/15/15 with stratified sampling so every class appears in train, validation and test. PlantDoc shares the labels but not the look, and is held back as the out-of-distribution test.</small></figcaption></figure>
+      <figure class="feat"><div class="fmedia"><img src="pd-augment.jpg" alt="Augmentation samples: crops and flips, brightness and tone, defocus, noise, JPEG compression and blur" loading="lazy"></div><figcaption><span class="step">2</span><b>Augment toward the field</b><small>Spatial (crops, flips, rotation, perspective), colour (brightness, tone curve, hue), sensor (defocus, noise, JPEG, blur), elastic warp and coarse dropout, so the model sees lab leaves the way a phone camera would.</small></figcaption></figure>
+      <figure class="feat"><div class="fmedia"><img src="pd-arch.jpg" alt="ResNet-18 architecture diagram with a PSA block before the final residual stage and a 38-class head" loading="lazy"></div><figcaption><span class="step">3</span><b>ResNet-18 + Pyramid Squeeze Attention</b><small>Residual skip connections let layers fall back to identity, which fixes the degradation problem and keeps gradients flowing. A PSA block re-weights channels at several spatial scales so attention lands on the lesions. It is added residually, so it can enrich features but never degrade them.</small></figcaption></figure>
+      <figure class="feat"><div class="fmedia"><img src="pd-training.jpg" alt="Training and validation accuracy curves: baseline over 150 epochs versus the best backbone over 50 epochs" loading="lazy"></div><figcaption><span class="step">4</span><b>Train with a tuned recipe</b><small>Seven ablation runs (E1 to E7) added class-balanced sampling, augmentation, AdamW with cosine annealing, discriminative learning rates, dropout, label smoothing and PSA. The best backbone converges in 50 epochs instead of 150 with a train-validation gap within ±0.5 pt.</small></figcaption></figure>
+      <figure class="feat"><div class="fmedia"><img src="pd-field.jpg" alt="Healthy and late-blight tomato leaves photographed in the field" loading="lazy"></div><figcaption><span class="step">5</span><b>Fine-tune on field photos, layer by layer</b><small>Discriminative fine-tuning on PlantDoc: low learning rates for early layers to keep transferable edge and colour features, higher rates for deep layers and the classifier head so they adapt to the new distribution.</small></figcaption></figure>
+      <figure class="feat"><div class="fmedia"><img src="pd-roc.jpg" alt="Macro-averaged ROC curves: PlantDoc before fine-tuning AUC 0.57, after AUC 0.94, PlantVillage AUC 1.00" loading="lazy"></div><figcaption><span class="step">6</span><b>Evaluate in and out of distribution</b><small>Accuracy, macro F1 and AUC on the PlantVillage test split and on PlantDoc, before and after fine-tuning. Macro F1 is tracked because a false positive means an unnecessary treatment and a miss means an untreated plant.</small></figcaption></figure>
+    </div>
+
+    <h3>Results</h3>
+    <div class="build-notes">
+      <div><b>In the lab: 99.89% accuracy, AUC 1.000</b><small>ResNet-18 replicates Castilla et al.'s strong baseline on a 38-class problem. Label smoothing and PSA do not change lab accuracy but help generalisation later.</small></div>
+      <div><b>In the field: 6.2% → 50.4% accuracy</b><small>Discriminative fine-tuning on PlantDoc lifts accuracy from 6.21% to 50.35%, macro F1 from 0.05 to 0.44, and AUC from 0.57 to 0.94.</small></div>
+      <div><b>No trade-off in the lab</b><small>After fine-tuning, PlantVillage accuracy dips only 0.36 pt to 99.48%, so the model keeps what it learned while adapting to the field.</small></div>
+      <div><b>What the AUC says</b><small>A 0.94 AUC with 50% accuracy means the model reliably ranks the right disease near the top but does not always pick it first across 38 classes. More diverse field images and style-transfer augmentation are the next steps.</small></div>
+    </div>
+  </div>
+</section>
+
+
+<script>
+(function(){
+  var chips=document.querySelectorAll('.chip'), cards=document.querySelectorAll('#cards .card');
+  chips.forEach(function(c){c.addEventListener('click',function(){
+    var f=c.getAttribute('data-filter');
+    chips.forEach(function(x){x.setAttribute('aria-pressed',x===c?'true':'false')});
+    cards.forEach(function(k){k.hidden=!(f==='all'||k.getAttribute('data-category')===f)});
+  })});
+})();
+
+(function(){
+  var views={'mealvitals':1,'plant-disease':1};
+  var home=document.getElementById('home');
+  function route(){
+    var h=(location.hash||'').replace('#','');
+    var show=views[h]?h:null;
+    home.hidden=!!show;
+    Object.keys(views).forEach(function(id){document.getElementById(id).hidden=(id!==show)});
+    if(show){window.scrollTo(0,0)}
+    else if(h){var t=document.getElementById(h); if(t) t.scrollIntoView()}
+  }
+  window.addEventListener('hashchange',route); route();
+})();
+</script>
+
+</body>
+</html>
